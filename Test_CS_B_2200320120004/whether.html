@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Weather App</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 50px;
+    }
+    input, button {
+      padding: 10px;
+      margin: 5px;
+    }
+    .weather-info {
+      margin-top: 20px;
+      font-size: 1.2em;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Weather App</h1>
+  <form id="weatherForm">
+    <input type="text" id="cityInput" placeholder="Enter city name" required>
+    <button type="submit">Get Weather</button>
+  </form>
+  <div id="weatherOutput" class="weather-info"></div>
+
+  <script>
+    document.getElementById("weatherForm").addEventListener("submit", async function(event) {
+      event.preventDefault();
+
+      const cityname = document.getElementById("cityInput").value;
+      const apiKey = '98a9245feaaa816a45b428da8ef4dbee'; 
+      const apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${cityname},IN&appid=${apiKey}&units=metric`;
+
+      try {
+        const response = await fetch(apiUrl);
+        console.log(response);
+        
+        alert("found")
+        if (!response.ok) throw new Error("City not found");
+
+        const data = await response.json();
+        const maxTemp = data.main.temp_max;
+        const minTemp = data.main.temp_min;
+        const humidity = data.main.humidity;
+        const wind = wind.speed;
+
+        document.getElementById("weatherOutput").innerHTML = `
+          <p><strong>City:</strong> ${data.name}</p>
+          <p><strong>Max Temperature:</strong> ${maxTemp}°C</p>
+          <p><strong>Min Temperature:</strong> ${minTemp}°C</p>
+          <p><strong>Humidity:</strong> ${humidity}</p>
+          <p><strong>Wind Speed:</strong> ${wind}</p>
+        `;
+      } catch (error) {
+        document.getElementById("weatherOutput").innerHTML = "<p>City not found or network error</p>";
+      }
+    });
+  </script>
+
+</body>
+</html>
